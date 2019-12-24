@@ -99,11 +99,11 @@ case "$2" in
         if [[ -z "$USERNAME" ]]; then
             read -p "Username: " USERNAME
         fi
-        if [[ -z "$PASSWORD" ]]; then
+        if [[ -z "${PASSWORD-default}" ]]; then
             read -s -p "Password: " PASSWORD
             echo
         fi
-        echo "$USERNAME:$PASSWORD" > "$REPO_AUTH_FILE"
+        echo "$USERNAME:${PASSWORD-default}" > "$REPO_AUTH_FILE"
         ;;
     logout)
         rm -f "$REPO_AUTH_FILE"
@@ -112,7 +112,7 @@ case "$2" in
         CMD=push
         CHART=$2
 
-        if [[ -z "$USERNAME" ]] || [[ -z "$PASSWORD" ]]; then
+        if [[ -z "$USERNAME" ]] || [[ -z "${PASSWORD-default}" ]]; then
             if [[ -f "$REPO_AUTH_FILE" ]]; then
                 echo "Using cached login creds..."
                 AUTH="$(cat $REPO_AUTH_FILE)"
@@ -120,14 +120,14 @@ case "$2" in
                 if [[ -z "$USERNAME" ]]; then
                     read -p "Username: " USERNAME
                 fi
-                if [[ -z "$PASSWORD" ]]; then
+                if [[ -z "${PASSWORD-default}" ]]; then
                     read -s -p "Password: " PASSWORD
                     echo
                 fi
-                AUTH="$USERNAME:$PASSWORD"
+                AUTH="$USERNAME:${PASSWORD-default}"
             fi
 	else
-		AUTH="$USERNAME:$PASSWORD"
+		AUTH="$USERNAME:${PASSWORD-default}"
         fi
 
         if [[ -d "$CHART" ]]; then

@@ -71,6 +71,11 @@ declare HELM3_VERSION="$(helm version --client --short | grep "v3\.")"
 declare REPO=$1
 declare REPO_URL="$(helm repo list | grep "^$REPO" | awk '{print $2}')/"
 
+if [[ -n $HOME ]]; then
+declare HOME="$(pwd)"
+mkdir -p $HOME/.config/helm
+fi
+
 if [[ -n $HELM3_VERSION ]]; then
 declare REPO_AUTH_FILE="$HOME/.config/helm/auth.$REPO"
 else
